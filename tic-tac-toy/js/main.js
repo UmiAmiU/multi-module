@@ -48,7 +48,9 @@ const winCondition = {
 let player = "cross";
 let checked = {};
 
-function startGame() {
+async function startGame() {
+  const { default: winCheck } = await import("./winCheck.js");
+
   gameField.addEventListener("click", (event) => {
     const cell = event.target;
     const cellIndex = event.target.dataset.index;
@@ -64,18 +66,8 @@ function startGame() {
       checked[cellIndex] = "circle";
       player = "cross";
     }
-    winCheck(cellIndex);
-    console.log("1");
+    winCheck(cellIndex, winMessage);
   });
-}
-
-function winCheck(cellIndex) {
-  const win = winCondition[cellIndex].find((line) =>
-    line.every((block) => checked[block] === checked[cellIndex])
-  );
-  if (win || Object.keys(checked).length === 9) {
-    winMessage(win);
-  }
 }
 
 function winMessage(win) {
